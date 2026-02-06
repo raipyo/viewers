@@ -128,9 +128,9 @@ const createRoutes = ({
 
   const DentalRoute = {
     path: '/dental',
-    children: Dental, // the component
-    private: true, // make it private like other routes
-    props: {}, // you can pass props here if needed
+    children: Dental,
+    private: true,
+    props: {},
   };
 
   const allRoutes = [

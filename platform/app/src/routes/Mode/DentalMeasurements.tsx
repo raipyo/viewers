@@ -1,13 +1,10 @@
-// DentalMeasurements.tsx
 import React, { useState, useEffect } from 'react';
 
 const DentalMeasurements = ({ servicesManager }) => {
-  // Safety check
   if (!servicesManager) return <div>Loading services...</div>;
 
   const [measurements, setMeasurements] = useState([]);
 
-  // --- Backend API functions ---
   const saveMeasurements = async data => {
     try {
       await fetch('http://localhost:5000/api/save-measurements', {
@@ -35,20 +32,17 @@ const DentalMeasurements = ({ servicesManager }) => {
     }
   };
 
-  // --- Load measurements on mount ---
   useEffect(() => {
     loadMeasurements();
   }, []);
 
-  // --- Add new measurement ---
   const addMeasurement = type => {
-    const value = Math.random() * 10; // Replace with actual OHIF tool value
+    const value = Math.random() * 10;
     const newMeasurements = [...measurements, { type, value: value.toFixed(2) }];
     setMeasurements(newMeasurements);
-    saveMeasurements(newMeasurements); // Save immediately after change
+    saveMeasurements(newMeasurements);
   };
 
-  // --- Export JSON locally ---
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(measurements, null, 2)], { type: 'application/json' });
     const link = document.createElement('a');
@@ -62,10 +56,24 @@ const DentalMeasurements = ({ servicesManager }) => {
       <h3>Dental Measurements</h3>
 
       <div style={{ marginBottom: 10 }}>
-        <button onClick={() => addMeasurement('PA length')}>PA length</button>
-        <button onClick={() => addMeasurement('Canal angle')}>Canal angle</button>
-        <button onClick={() => addMeasurement('Crown width')}>Crown width</button>
-        <button onClick={() => addMeasurement('Root length')}>Root length</button>
+        {['PA length', 'Canal angle', 'Crown width', 'Root length'].map(label => (
+          <button
+            key={label}
+            onClick={() => addMeasurement(label)}
+            style={{
+              backgroundColor: '#007bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 4,
+              padding: '6px 12px',
+              marginRight: 8,
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       <ul>
@@ -76,7 +84,20 @@ const DentalMeasurements = ({ servicesManager }) => {
         ))}
       </ul>
 
-      <button onClick={exportJSON}>Export JSON</button>
+      <button
+        onClick={exportJSON}
+        style={{
+          backgroundColor: '#28a745',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 4,
+          padding: '6px 12px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+        }}
+      >
+        Export JSON
+      </button>
     </div>
   );
 };
